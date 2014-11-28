@@ -1,0 +1,14 @@
+--==============================================================--
+-- TABLE: ACCOUNT_PASSENGER                                     --
+--==============================================================--
+SET CURRENT SQLID='XR105';
+CREATE TABLE ACCOUNT_PASSENGER
+(
+   PASSENGERID          INT NOT NULL,
+   ACCOUNTID            INT NOT NULL,
+   CONSTRAINT FKACOPS1 FOREIGN KEY (PASSENGERID)
+         REFERENCES PASSENGER (PASSENGERID) ON DELETE CASCADE,
+   CONSTRAINT FKACOPS2 FOREIGN KEY (ACCOUNTID)
+         REFERENCES ACCOUNT (ACCOUNTID) ON DELETE CASCADE
+) IN MFV2.MFV2TS;
+COMMIT;

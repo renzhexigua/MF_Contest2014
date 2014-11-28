@@ -1,0 +1,135 @@
+//MF2014 JOB ACCT#,XR106,MSGCLASS=H,MSGLEVEL=(1,1),
+//             CLASS=A,NOTIFY=&SYSUID
+//********************************************************************
+//* DB2 PRECOMPILE, CICS TRANSLATION, COBOL COMPILE, PRE-LINK, *
+//* AND LINK EDIT. ALSO DB2 BIND. *
+//********************************************************************
+//********************************************************************
+//* 1. DB2 PRECOMPILE *
+//********************************************************************
+//PC EXEC PGM=DSNHPC,
+//*        PARM='HOST(IBMCOB),SOURCE,NEWFUN(NO)',
+//         PARM=('HOST(IBMCOB)',APOST,APOSTSQL,SOURCE,
+//         NOXREF,'SQL(DB2)','DEC(31)'),
+// REGION=0M
+//SYSIN    DD DSN=XR106.MF.COBOL(????),DISP=SHR
+//DBRMLIB  DD DISP=SHR,DSN=XR106.MF.DB2.DBRM(????)
+//STEPLIB  DD DISP=SHR,DSN=DB2.V8R1.SDSNEXIT
+//         DD DISP=SHR,DSN=DB2.V8R1.SDSNLOAD
+//SYSCIN   DD DSN=&&DSNHOUT,DISP=(MOD,PASS),UNIT=SYSDA,
+//            SPACE=(800,(500,500))
+//SYSLIB   DD DISP=SHR,DSN=DB2.V8R1.DSNB.SRCLIB.DATA
+//         DD DSN=XR106.MF.DB2.CPY,DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSTERM  DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=*
+//SYSUT1   DD SPACE=(800,(500,500),,,ROUND),UNIT=SYSDA
+//SYSUT2   DD SPACE=(800,(500,500),,,ROUND),UNIT=SYSDA
+//********************************************************************
+//* 2. CICS TRANSLATOR
+//********************************************************************
+//TRN EXEC PGM=DFHECP1$,REGION=0M,
+// COND=(4,LT,PC)
+//STEPLIB  DD DSN=CICSTS.V3R1.CICS.SDFHLOAD,DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSPUNCH DD DSN=&&SYSCIN,
+//            DISP=(MOD,PASS),UNIT=SYSDA,
+//            DCB=BLKSIZE=400,
+//            SPACE=(400,(400,100))
+//SYSUDUMP DD SYSOUT=*
+//SYSIN    DD DSN=&&DSNHOUT,DISP=(OLD,DELETE)
+//*
+//********************************************************************
+//* 3. COBOL COMPILE
+//********************************************************************
+//COB EXEC PGM=IGYCRCTL,
+//*PARM=(NOSEQUENCE,QUOTE,RENT,TEST,MAP,'PGMNAME(LONGUPPER)'),
+//*PARM=(NODYNAM,OBJECT,RENT,RES,SQL,APOST,MAP,XREF),
+// PARM='RENT,ADV,NUM,APOST,SOURCE,LIB',REGION=2048K,
+// COND=(4,LT,TRN)
+//***INSERT A NEW LINE
+//*DBRMLIB  DD DISP=SHR,DSN=DSN810.DBRMLIB.DATA(DBSYSC01)
+//STEPLIB  DD DISP=SHR,DSN=COBOL.V3R4.SIGYCOMP
+//***INSERT A NEW LINE
+//*         DD DISP=SHR,DSN=DSN810.SDSNLOAD
+//SYSPRINT DD SYSOUT=*
+//SYSLIB   DD DSN=CICSTS.V3R1.CICS.SDFHCOB,DISP=SHR
+//         DD DSN=XR106.MF.DB2.CPY,DISP=SHR
+//         DD DSN=CICSTS.V3R1.CICS.SDFHMAC,DISP=SHR
+//         DD DSN=CICSTS.V3R1.CICS.SDFHSAMP,DISP=SHR
+//SYSTERM  DD SYSOUT=*
+//SYSLIN   DD DSN=&&LOADSET,DISP=(MOD,PASS),UNIT=SYSDA,
+//            SPACE=(800,(500,500))
+//SYSIN    DD DSN=&&SYSCIN,DISP=(OLD,DELETE)
+//SYSUT1   DD SPACE=(800,(500,500),,,ROUND),UNIT=SYSDA
+//SYSUT2   DD SPACE=(800,(500,500),,,ROUND),UNIT=SYSDA
+//SYSUT3   DD SPACE=(800,(500,500),,,ROUND),UNIT=SYSDA
+//SYSUT4   DD SPACE=(800,(500,500),,,ROUND),UNIT=SYSDA
+//SYSUT5   DD SPACE=(800,(500,500),,,ROUND),UNIT=SYSDA
+//SYSUT6   DD SPACE=(800,(500,500),,,ROUND),UNIT=SYSDA
+//SYSUT7   DD SPACE=(800,(500,500),,,ROUND),UNIT=SYSDA
+//********************************************************************
+//* 4. PRELINK
+//********************************************************************
+//PLKED EXEC PGM=EDCPRLK,COND=(4,LT,COB),REGION=0M
+//STEPLIB  DD DISP=SHR,DSN=CEE.SCEERUN
+//SYSMSGS  DD DISP=SHR,
+// DSN=CEE.SCEEMSGP(EDCPMSGE)
+//SYSIN    DD DSN=&&LOADSET,DISP=(OLD,DELETE)
+//SYSMOD   DD DSN=&&PLKSET,UNIT=SYSDA,DISP=(MOD,PASS),
+//           SPACE=(32000,(30,30)),
+//           DCB=(RECFM=FB,LRECL=80,BLKSIZE=3200)
+//SYSDEFSD DD DUMMY
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSTERM  DD SYSOUT=*
+//********************************************************************
+//* 5. LINKEDIT
+//********************************************************************
+//LKED EXEC PGM=IEWL,PARM='REUS,RENT',REGION=0M,
+// COND=(4,LT,PLKED)
+//SYSLIB   DD DISP=SHR,DSN=CEE.SCEELKED
+//         DD DISP=SHR,DSN=DB2.V8R1.SDSNLOAD
+//         DD DISP=SHR,DSN=CICSTS.V3R1.CICS.SDFHLOAD
+//         DD DISP=SHR,DSN=ISP.SISPLOAD
+//         DD DISP=SHR,DSN=GDDM.SADMMOD
+//         DD DISP=SHR,DSN=SYS1.LINKLIB
+//*        DD DISP=SHR,DSN=XR106.MF.LOAD
+//SYSLMOD  DD DISP=SHR,DSN=XR106.MF.LOAD(????)
+//SYSPRINT DD SYSOUT=*
+//SYSUT1   DD SPACE=(1024,(50,50)),UNIT=SYSDA
+//SYSLIN   DD DSN=&&PLKSET,DISP=(OLD,DELETE)
+//         DD DDNAME=SYSIN
+//CICSLOAD DD DSN=CICSTS.V3R1.CICS.SDFHLOAD,
+// DISP=SHR
+//SYSIN    DD *
+  INCLUDE SYSLIB(DSNCLI)
+  MODE RMODE(ANY)
+  NAME ????(R)
+/*
+//********************************************************************
+//* 6. DB2 BIND
+//********************************************************************
+//BIND EXEC PGM=IKJEFT01,DYNAMNBR=20
+//STEPLIB  DD DSN=DB2.V8R1.SDSNLOAD,DISP=SHR
+//DBRMLIB  DD DSN=XR106.MF.DB2.DBRM(????),DISP=SHR
+//SYSUDUMP DD SYSOUT=*
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+ GRANT BIND, EXECUTE ON PLAN +++++ TO PUBLIC;
+//SYSTSIN  DD *
+DSN SYSTEM(DSNA)
+   BIND  MEMBER    (????) -
+         PACKAGE   (MF@@) -
+         ACTION    (REP) -
+         ENCODING(EBCDIC) -
+         ISOLATION (CS) -
+         VALIDATE  (BIND)-
+         CURRENTDATA(NO)
+
+    BIND PLAN(+++++) -
+         PKLIST(MF@@.*) -
+         ISO(CS) CURRENTDATA(NO) ENCODING(EBCDIC) ACTION(REPLACE)
+  END
+/*

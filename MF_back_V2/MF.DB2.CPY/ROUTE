@@ -1,0 +1,40 @@
+      ******************************************************************
+      * DCLGEN TABLE(XR105.ROUTE)                                      *
+      *        LIBRARY(XR106.MF.DB2.CPY(ROUTE))                        *
+      *        ACTION(REPLACE)                                         *
+      *        LANGUAGE(COBOL)                                         *
+      *        NAMES(H-)                                               *
+      *        QUOTE                                                   *
+      *        COLSUFFIX(YES)                                          *
+      * ... IS THE DCLGEN COMMAND THAT MADE THE FOLLOWING STATEMENTS   *
+      ******************************************************************
+           EXEC SQL DECLARE XR105.ROUTE TABLE
+           ( FLIGHT                         CHAR(6) NOT NULL,
+             AIRLINEID                      INTEGER,
+             TERMINAL1                      CHAR(2),
+             TERMINAL2                      CHAR(2),
+             DEPARTURETIME                  TIME NOT NULL,
+             ARRIVALTIME                    TIME NOT NULL,
+             PLANETYPE                      CHAR(3)
+           ) END-EXEC.
+      ******************************************************************
+      * COBOL DECLARATION FOR TABLE XR105.ROUTE                        *
+      ******************************************************************
+       01  DCLROUTE.
+      *                       FLIGHT
+           10 R-FLIGHT             PIC X(6).
+      *                       AIRLINEID
+           10 H-AIRLINEID          PIC S9(9) USAGE COMP.
+      *                       TERMINAL1
+           10 H-TERMINAL1          PIC X(2).
+      *                       TERMINAL2
+           10 H-TERMINAL2          PIC X(2).
+      *                       DEPARTURETIME
+           10 H-DEPARTURETIME      PIC X(8).
+      *                       ARRIVALTIME
+           10 H-ARRIVALTIME        PIC X(8).
+      *                       PLANETYPE
+           10 H-PLANETYPE          PIC X(3).
+      ******************************************************************
+      * THE NUMBER OF COLUMNS DESCRIBED BY THIS DECLARATION IS 7       *
+      ******************************************************************

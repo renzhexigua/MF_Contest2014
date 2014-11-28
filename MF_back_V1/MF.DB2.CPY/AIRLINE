@@ -1,0 +1,34 @@
+      ******************************************************************
+      * DCLGEN TABLE(XR105.AIRLINE)                                    *
+      *        LIBRARY(XR106.MF.DB2.CPY(AIRLINE))                      *
+      *        ACTION(REPLACE)                                         *
+      *        LANGUAGE(COBOL)                                         *
+      *        NAMES(H-)                                               *
+      *        QUOTE                                                   *
+      *        COLSUFFIX(YES)                                          *
+      * ... IS THE DCLGEN COMMAND THAT MADE THE FOLLOWING STATEMENTS   *
+      ******************************************************************
+           EXEC SQL DECLARE XR105.AIRLINE TABLE
+           ( AIRLINEID                      INTEGER NOT NULL,
+             IATA                           CHAR(2),
+             ICAO                           CHAR(3),
+             CARRIED                        CHAR(3),
+             AIRLINE                        CHAR(50)
+           ) END-EXEC.
+      ******************************************************************
+      * COBOL DECLARATION FOR TABLE XR105.AIRLINE                      *
+      ******************************************************************
+       01  DCLAIRLINE.
+      *                       AIRLINEID
+           10 H-AIRLINEID          PIC S9(9) USAGE COMP.
+      *                       IATA
+           10 H-IATA               PIC X(2).
+      *                       ICAO
+           10 H-ICAO               PIC X(3).
+      *                       CARRIED
+           10 H-CARRIED            PIC X(3).
+      *                       AIRLINE
+           10 H-AIRLINE            PIC X(50).
+      ******************************************************************
+      * THE NUMBER OF COLUMNS DESCRIBED BY THIS DECLARATION IS 5       *
+      ******************************************************************

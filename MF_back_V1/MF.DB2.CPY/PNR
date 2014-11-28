@@ -1,0 +1,78 @@
+      ******************************************************************
+      * DCLGEN TABLE(XR105.PNR)                                        *
+      *        LIBRARY(XR106.MF.DB2.CPY(PNR))                          *
+      *        ACTION(REPLACE)                                         *
+      *        LANGUAGE(COBOL)                                         *
+      *        NAMES(H-)                                               *
+      *        QUOTE                                                   *
+      *        COLSUFFIX(YES)                                          *
+      * ... IS THE DCLGEN COMMAND THAT MADE THE FOLLOWING STATEMENTS   *
+      ******************************************************************
+           EXEC SQL DECLARE XR105.PNR TABLE
+           ( RECORDID                       INTEGER NOT NULL,
+             PNR                            CHAR(5) NOT NULL,
+             FLIGHT                         CHAR(6) NOT NULL,
+             USERID                         INTEGER NOT NULL,
+             CLASS                          CHAR(1) NOT NULL,
+             DATE                           DATE NOT NULL,
+             DATELIMIT                      TIMESTAMP NOT NULL,
+             TICKETSTATUS                   CHAR(1) NOT NULL,
+             TICKETNUMBER                   CHAR(15),
+             FARE                           DECIMAL(5, 1) NOT NULL,
+             CURRENCY1                      CHAR(3) NOT NULL,
+             PAYMETHOD                      CHAR(5) NOT NULL,
+             PAYCURRENCY                    CHAR(3) NOT NULL,
+             SEATSTATUS                     CHAR(2) NOT NULL,
+             SEAT                           CHAR(3),
+             GATE                           CHAR(2),
+             OVERALLSTATUS                  CHAR(1) NOT NULL,
+             EXPIRE                         CHAR(1) NOT NULL
+           ) END-EXEC.
+      ******************************************************************
+      * COBOL DECLARATION FOR TABLE XR105.PNR                          *
+      ******************************************************************
+       01  DCLPNR.
+      *                       RECORDID
+           10 H-RECORDID           PIC S9(9) USAGE COMP.
+      *                       PNR
+           10 H-PNR                PIC X(5).
+      *                       FLIGHT
+           10 H-FLIGHT             PIC X(6).
+           10 H-FLIGHT2            PIC X(6).
+      *                       USERID
+           10 H-USERID             PIC S9(9) USAGE COMP.
+      *                       CLASS
+           10 H-CLASS              PIC X(1).
+           10 H-CLASS2             PIC X(1).
+      *                       DATE
+           10 H-DATE               PIC X(10).
+           10 H-DATE2              PIC X(10).
+      *                       DATELIMIT
+           10 H-DATELIMIT          PIC X(26).
+      *                       TICKETSTATUS
+           10 H-TICKETSTATUS       PIC X(1).
+      *                       TICKETNUMBER
+           10 H-TICKETNUMBER       PIC X(15).
+           10 H-TICKETNUMBER2      PIC X(15).
+      *                       FARE
+           10 H-FARE               PIC S9(4)V9(1) USAGE COMP-3.
+      *                       CURRENCY1
+           10 H-CURRENCY1          PIC X(3).
+      *                       PAYMETHOD
+           10 H-PAYMETHOD          PIC X(5).
+      *                       PAYCURRENCY
+           10 H-PAYCURRENCY        PIC X(3).
+      *                       SEATSTATUS
+           10 H-SEATSTATUS         PIC X(2).
+      *                       SEAT
+           10 H-SEAT               PIC X(3).
+           10 H-SEAT2              PIC X(3).
+      *                       GATE
+           10 H-GATE               PIC X(2).
+      *                       OVERALLSTATUS
+           10 H-OVERALLSTATUS      PIC X(1).
+      *                       EXPIRE
+           10 H-EXPIRE             PIC X(1).
+      ******************************************************************
+      * THE NUMBER OF COLUMNS DESCRIBED BY THIS DECLARATION IS 18      *
+      ******************************************************************

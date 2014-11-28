@@ -1,0 +1,12 @@
+--==============================================================--
+-- TABLE: CITY                                                  --
+--==============================================================--
+SET CURRENT SQLID='XR105';
+CREATE TABLE CITY
+(
+   CODE CHAR(3) NOT NULL,
+   CITY CHAR(20) NOT NULL,
+   CONSTRAINT CITY_PK PRIMARY KEY(CODE)
+) IN MFV2.MFV2TS;
+CREATE UNIQUE INDEX CITYIDX ON CITY(CODE);
+COMMIT;

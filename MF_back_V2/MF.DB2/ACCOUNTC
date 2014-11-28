@@ -1,0 +1,17 @@
+--==============================================================--
+-- TABLE: ACCOUNT                                               --
+--==============================================================--
+SET CURRENT SQLID='XR105';
+CREATE TABLE ACCOUNT
+(
+   ACCOUNTID      INT NOT NULL
+                        GENERATED ALWAYS AS IDENTITY
+                        (START WITH 1, INCREMENT BY 1),
+   ACCOUNTNAME          CHAR(20) NOT NULL,
+   PASSWORD             CHAR(32) NOT NULL,
+   EMAIL                CHAR(20),
+   EXPIRE               CHAR(1)  NOT NULL,
+   CONSTRAINT PKACONT PRIMARY KEY(ACCOUNTID)
+) IN MFV2.MFV2TS;
+CREATE UNIQUE INDEX ACOUTIDX ON ACCOUNT(ACCOUNTID);
+COMMIT;

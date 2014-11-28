@@ -1,0 +1,16 @@
+      *LTFPRESP
+       01 listTicketsResponse.
+          02 numOfTickets   PIC S9(3) USAGE COMP.
+          02 tickets        OCCURS 20 TIMES.
+             03 passengerId    PIC S9(9) USAGE COMP.
+             03 airline        PIC X(50).
+             03 flight         PIC X(6).
+             03 flightDate     PIC X(10).
+             03 departureTime  PIC X(8).
+             03 arrivalTime    PIC X(8).
+             03 orgAirport     PIC X(50).
+             03 dstAirport     PIC X(50).
+             03 expire         PIC X(1).
+             03 ticketStatus   PIC X(1).
+             03 overallStatus  PIC X(1).
+             03 ticketNumber   PIC X(15).

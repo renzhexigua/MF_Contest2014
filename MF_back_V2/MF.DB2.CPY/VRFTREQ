@@ -1,0 +1,8 @@
+      *VRFTREQ
+       01 verifyTicketRequest.
+          03 passengerName PIC X(40).
+          03 flight        PIC X(6).
+          03 flightClass   PIC X(1).
+          03 flightDate    PIC X(10).
+          03 ticketNumber  PIC X(15).
+          03 seat          PIC X(3).

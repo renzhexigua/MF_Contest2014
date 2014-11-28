@@ -1,0 +1,13 @@
+//MFCOMCB JOB 36512,XR106,CLASS=A,MSGCLASS=H,REGION=4M,                 00010011
+// MSGLEVEL=(1,1),NOTIFY=&SYSUID                                        00020005
+//CICSLIB JCLLIB ORDER=CICSTS.V3R1.CICS.SDFHPROC                        00030007
+//CICSCMP EXEC DFHYITVL,                                                00040007
+//         INDEX='CICSTS.V3R1.CICS',                                    00050001
+//         LE370HLQ='CEE',                                              00060001
+//         OUTC=H,                                                      00070001
+// PROGLIB='XR106.MF.LOAD'                                              00080012
+//TRN.SYSIN DD DSN=XR106.MF.COBOL(????),DISP=SHR                        00090014
+//COB.SYSLIB DD DSN=XR106.MF.DB2.CPY,DISP=SHR                           00100015
+//LKED.SYSIN DD *                                                       00110001
+  NAME ????(R)                                                          00120014
+/*                                                                      00130001

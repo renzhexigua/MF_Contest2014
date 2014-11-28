@@ -1,0 +1,9 @@
+--==============================================================
+-- DBMS NAME:      DB2 V7
+-- CREATED ON:     2014/11/19
+--==============================================================
+SET CURRENT SQLID='XR105';
+--DROP DATABASE MFV2;;;
+CREATE DATABASE MFV2 BUFFERPOOL BP2;
+CREATE TABLESPACE MFV2TS IN MFV2 BUFFERPOOL BP2 COMPRESS YES;
+COMMIT;

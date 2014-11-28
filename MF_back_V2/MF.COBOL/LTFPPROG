@@ -1,0 +1,140 @@
+      *************************************************                 00001035
+      *                                               *                 00002035
+      *   Description:                                *                 00003035
+      *                                               *                 00004035
+      *       Get all tickets of the account bound.   *                 00005035
+      *                                               *                 00006035
+      *   Copybook:                                   *                 00006135
+      *       Input:  LTFPREQ                         *                 00006235
+      *       Output: LTFPRESP                        *                 00006335
+      *                                               *                 00006435
+      *************************************************                 00007035
+       IDENTIFICATION DIVISION.                                         00010012
+       PROGRAM-ID. LTFPPROG.                                            00020026
+       ENVIRONMENT DIVISION.                                            00030012
+       DATA DIVISION.                                                   00040012
+       WORKING-STORAGE SECTION.                                         00050012
+           EXEC SQL INCLUDE SQLDA    END-EXEC.                          00060027
+           EXEC SQL INCLUDE SQLCA    END-EXEC.                          00070027
+           EXEC SQL INCLUDE AIRLINE  END-EXEC.                          00080027
+           EXEC SQL INCLUDE PNR      END-EXEC.
+           EXEC SQL INCLUDE ROUTE    END-EXEC.
+           EXEC SQL INCLUDE PASSENGR END-EXEC.
+           EXEC SQL INCLUDE AIRPOROT END-EXEC.
+           EXEC SQL INCLUDE ACCOTPAS END-EXEC.
+           EXEC SQL INCLUDE AIRPORT  END-EXEC.
+           EXEC SQL
+               DECLARE TICKETSGROUP CURSOR FOR
+                  SELECT PASSENGER.PASSENGERID,
+                         AIRLINE,
+                         PNR.FLIGHT,
+                         DATE,
+                         DEPARTURETIME,
+                         ORGAIRPORT,
+                         ARRIVALTIME,
+                         DSTAIRPORT,
+                         EXPIRE,
+                         TICKETSTATUS,
+                         OVERALLSTATUS,
+                         TICKETNUMBER
+                  FROM   AIRLINE,
+                         PNR,
+                         ROUTE,
+                         PASSENGER,
+                         AIRPORT_ROUTE
+                  WHERE  PASSENGER.PASSENGERID = PNR.USERID  AND
+                         PNR.FLIGHT = ROUTE.FLIGHT           AND
+                         PNR.FLIGHT = AIRPORT_ROUTE.FLIGHT   AND
+                         AIRLINE.AIRLINEID = ROUTE.AIRLINEID AND
+                         PNR.USERID IN (
+                                SELECT PASSENGER.PASSENGERID
+                                FROM   ACCOUNT_PASSENGER,
+                                       PASSENGER,
+                                       PNR
+                                WHERE  ACCOUNTID = :H-ACCOUNTID   AND
+                                       ACCOUNT_PASSENGER.PASSENGERID =
+                                          PASSENGER.PASSENGERID   AND
+                                       ACCOUNT_PASSENGER.PASSENGERID =
+                                          PNR.USERID
+                                        )
+           END-EXEC.
+       COPY LTFPREQ.                                                    00080127
+       COPY LTFPRESP.                                                   00080227
+      * working storage data                                            00081010
+       01 CONTAINERNAME PIC X(16) VALUE IS 'LTFP-DATA'.                 00100027
+       01 RC PIC 9(8) BINARY.                                           00121010
+       LINKAGE SECTION.                                                 00130012
+       PROCEDURE DIVISION.                                              00150012
+       0000-MAIN-PROGRAM.                                               00160012
+            MOVE ZERO TO accountId.                                     00170028
+      * get inbound data                                                00180010
+            EXEC CICS GET CONTAINER(CONTAINERNAME)                      00190023
+               INTO (accountId)                                         00200029
+               RESP(RC)                                                 00220010
+            END-EXEC.                                                   00230010
+       1000-PROCESS-DATA.                                               00310012
+      * query table                                                     00320010
+            MOVE ZERO TO H-ACCOUNTID.                                   00320131
+            MOVE accountId TO H-ACCOUNTID.                              00320234
+            MOVE LOW-VALUES TO listTicketsResponse.                     00321029
+            MOVE 0 TO numOfTickets.                                     00322033
+      * open cursor
+            EXEC SQL
+                 OPEN TICKETSGROUP
+            END-EXEC.
+            PERFORM UNTIL SQLCODE EQUAL 100
+                    EXEC SQL
+                         FETCH TICKETSGROUP
+                         INTO  :H-PASSENGERID,
+                               :H-AIRLINE,
+                               :H-FLIGHT,
+                               :H-DATE,
+                               :H-DEPARTURETIME,
+                               :H-ORGAIRPORT,
+                               :H-ARRIVALTIME,
+                               :H-DSTAIRPORT,
+                               :H-EXPIRE,
+                               :H-TICKETSTATUS,
+                               :H-OVERALLSTATUS,
+                               :H-TICKETNUMBER
+                    END-EXEC
+                IF SQLCODE EQUAL 0
+                    ADD 1 TO numOfTickets
+                    MOVE H-PASSENGERID TO passengerId(numOfTickets)
+                    MOVE H-AIRLINE TO airline(numOfTickets)
+                    MOVE H-FLIGHT TO flight(numOfTickets)
+                    MOVE H-DATE TO flightDate(numOfTickets)
+                    MOVE H-DEPARTURETIME TO departureTime(numOfTickets)
+                    MOVE H-ARRIVALTIME TO arrivalTime(numOfTickets)
+                    MOVE H-EXPIRE TO expire(numOfTickets)
+                    MOVE H-TICKETSTATUS TO ticketStatus(numOfTickets)
+                    MOVE H-OVERALLSTATUS TO overallStatus(numOfTickets)
+                    MOVE H-TICKETNUMBER TO ticketNumber(numOfTickets)
+      * convert airportid to airport name
+                    MOVE SPACE TO H-AIRPORT
+                    EXEC SQL
+                             SELECT AIRPORT
+                             INTO   :H-AIRPORT
+                             FROM   AIRPORT
+                             WHERE  AIRPORTID = :H-ORGAIRPORT
+                    END-EXEC
+                    MOVE H-AIRPORT TO orgAirport(numOfTickets)
+                    MOVE SPACE TO H-AIRPORT
+                    EXEC SQL
+                             SELECT AIRPORT
+                             INTO   :H-AIRPORT
+                             FROM   AIRPORT
+                             WHERE  AIRPORTID = :H-DSTAIRPORT
+                    END-EXEC
+                    MOVE H-AIRPORT TO dstAirport(numOfTickets)
+                END-IF
+            END-PERFORM.
+            EXEC SQL
+                 CLOSE TICKETSGROUP
+            END-EXEC.
+      * return result                                                   00390010
+            EXEC CICS PUT CONTAINER(CONTAINERNAME)                      00410023
+                FROM(listTicketsResponse)                               00420029
+            END-EXEC.                                                   00440010
+      * return calling program                                          00450010
+            EXEC CICS RETURN END-EXEC.                                  00460012

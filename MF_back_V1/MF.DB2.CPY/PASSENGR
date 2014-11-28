@@ -1,0 +1,41 @@
+      ******************************************************************
+      * DCLGEN TABLE(XR105.PASSENGER)                                  *
+      *        LIBRARY(XR106.MF.DB2.CPY(PASSENGR))                     *
+      *        ACTION(REPLACE)                                         *
+      *        LANGUAGE(COBOL)                                         *
+      *        NAMES(H-)                                               *
+      *        QUOTE                                                   *
+      *        COLSUFFIX(YES)                                          *
+      * ... IS THE DCLGEN COMMAND THAT MADE THE FOLLOWING STATEMENTS   *
+      ******************************************************************
+           EXEC SQL DECLARE XR105.PASSENGER TABLE
+           ( PASSENGERID                    INTEGER NOT NULL,
+             PASSENGERNAME                  CHAR(40) NOT NULL,
+             SEX                            CHAR(6) NOT NULL,
+             PASSENGERTYPE                  CHAR(2) NOT NULL,
+             CARDTYPE                       CHAR(2) NOT NULL,
+             CARDID                         CHAR(18) NOT NULL,
+             CONTACTINFO                    CHAR(11)
+           ) END-EXEC.
+      ******************************************************************
+      * COBOL DECLARATION FOR TABLE XR105.PASSENGER                    *
+      ******************************************************************
+       01  DCLPASSENGER.
+      *                       PASSENGERID
+           10 H-PASSENGERID        PIC S9(9) USAGE COMP.
+      *                       PASSENGERNAME
+           10 H-PASSENGERNAME      PIC X(40).
+           10 H-PASSENGERNAME2     PIC X(40).
+      *                       SEX
+           10 H-SEX                PIC X(6).
+      *                       PASSENGERTYPE
+           10 H-PASSENGERTYPE      PIC X(2).
+      *                       CARDTYPE
+           10 H-CARDTYPE           PIC X(2).
+      *                       CARDID
+           10 H-CARDID             PIC X(18).
+      *                       CONTACTINFO
+           10 H-CONTACTINFO        PIC X(11).
+      ******************************************************************
+      * THE NUMBER OF COLUMNS DESCRIBED BY THIS DECLARATION IS 7       *
+      ******************************************************************

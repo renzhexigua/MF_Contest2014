@@ -1,0 +1,4 @@
+      *GAPWRESP
+       01 getPasswordResponse.
+          03 accountId PIC S9(9) USAGE COMP.
+          03 passwd    PIC X(32).

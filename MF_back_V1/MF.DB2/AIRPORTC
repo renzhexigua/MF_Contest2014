@@ -1,0 +1,17 @@
+--==============================================================--
+-- TABLE: AIRPORT                                               --
+--==============================================================--
+SET CURRENT SQLID='XR105';
+CREATE TABLE AIRPORT
+(
+   AIRPORTID      INT NOT NULL
+                        GENERATED ALWAYS AS IDENTITY
+                        (START WITH 1, INCREMENT BY 1),
+   CITYCODE             CHAR(3)  NOT NULL,
+   AIRPORT              CHAR(50) NOT NULL,
+   CONSTRAINT AIRPTPK PRIMARY KEY(AIRPORTID),
+   CONSTRAINT FK_AIR FOREIGN KEY(CITYCODE)
+      REFERENCES CITY(CODE) ON DELETE CASCADE
+) IN MFV2.MFV2TS;
+CREATE UNIQUE INDEX AIRPIDX ON AIRPORT(AIRPORTID);
+COMMIT;

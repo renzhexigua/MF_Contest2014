@@ -1,0 +1,57 @@
+      *************************************************                 00001035
+      *                                               *                 00002035
+      *   Description:                                *                 00003035
+      *                                               *                 00004035
+      *       Verify the user's identity when login.  *                 00005035
+      *                                               *                 00006035
+      *   Copybook:                                   *                 00006135
+      *       Input:  GAPWREQ                         *                 00006235
+      *       Output: GAPWRESP                        *                 00006335
+      *                                               *                 00006435
+      *************************************************                 00007035
+       IDENTIFICATION DIVISION.                                         00010012
+       PROGRAM-ID. GAPWPROG.                                            00020026
+       ENVIRONMENT DIVISION.                                            00030012
+       DATA DIVISION.                                                   00040012
+       WORKING-STORAGE SECTION.                                         00050012
+           EXEC SQL INCLUDE SQLDA   END-EXEC.                           00060027
+           EXEC SQL INCLUDE SQLCA   END-EXEC.                           00070027
+           EXEC SQL INCLUDE ACCOUNT END-EXEC.                           00080027
+       COPY GAPWREQ.                                                    00080127
+       COPY GAPWRESP.                                                   00080227
+      * working storage data                                            00081010
+       01 CONTAINERNAME PIC X(16) VALUE IS 'GAPW-DATA'.                 00100027
+       01 RC PIC 9(8) BINARY.                                           00121010
+       LINKAGE SECTION.                                                 00130012
+       PROCEDURE DIVISION.                                              00150012
+       0000-MAIN-PROGRAM.                                               00160012
+            MOVE LOW-VALUES TO accountName.                             00170028
+      * get inbound data                                                00180010
+            EXEC CICS GET CONTAINER(CONTAINERNAME)                      00190023
+               INTO (accountName)                                       00200029
+               RESP(RC)                                                 00220010
+            END-EXEC.                                                   00230010
+       1000-PROCESS-DATA.                                               00310012
+      * query table                                                     00320010
+            MOVE SPACE TO H-ACCOUNTNAME.                                00320131
+            MOVE accountName TO H-ACCOUNTNAME.                          00320234
+            MOVE SPACE TO H-PASSWORD.                                   00321029
+            MOVE ZERO  TO H-ACCOUNTID.                                  00322033
+            EXEC SQL                                                    00330012
+004200           SELECT PASSWORD,ACCOUNTID                              00340029
+004300           INTO :H-PASSWORD, :H-ACCOUNTID                         00350029
+004400           FROM XR105.ACCOUNT                                     00360025
+004500           WHERE ACCOUNTNAME = :H-ACCOUNTNAME                     00370029
+004600      END-EXEC                                                    00380012
+      * return result                                                   00390010
+            MOVE LOW-VALUE TO getPasswordResponse.                      00391033
+            IF SQLCODE IS NOT EQUAL TO ZERO                             00392031
+               MOVE 0 TO accountId                                      00393031
+            ELSE                                                        00394031
+               MOVE H-ACCOUNTID TO accountId                            00395034
+               MOVE H-PASSWORD TO passwd.                               00400032
+            EXEC CICS PUT CONTAINER(CONTAINERNAME)                      00410023
+                FROM(getPasswordResponse)                               00420029
+            END-EXEC.                                                   00440010
+      * return calling program                                          00450010
+007100      EXEC CICS RETURN END-EXEC.                                  00460012

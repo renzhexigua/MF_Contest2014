@@ -1,0 +1,132 @@
+      *************************************************                 00001035
+      *                                               *                 00002035
+      *   Description:                                *                 00003035
+      *                                               *                 00004035
+      *       Get one ticket's full information.      *                 00005036
+      *                                               *                 00006035
+      *   Copybook:                                   *                 00006135
+      *       Input:  GOTKREQ                         *                 00006236
+      *       Output: GOTKRESP                        *                 00006336
+      *                                               *                 00006435
+      *************************************************                 00007035
+       IDENTIFICATION DIVISION.                                         00010012
+       PROGRAM-ID. GOTKPROG.                                            00020036
+       ENVIRONMENT DIVISION.                                            00030012
+       DATA DIVISION.                                                   00040012
+       WORKING-STORAGE SECTION.                                         00050012
+           EXEC SQL INCLUDE SQLDA    END-EXEC.                          00060036
+           EXEC SQL INCLUDE SQLCA    END-EXEC.                          00070036
+           EXEC SQL INCLUDE AIRLINE  END-EXEC.                          00080036
+           EXEC SQL INCLUDE PNR      END-EXEC.                          00080136
+           EXEC SQL INCLUDE ROUTE    END-EXEC.                          00080236
+           EXEC SQL INCLUDE PASSENGR END-EXEC.                          00080336
+           EXEC SQL INCLUDE AIRPOROT END-EXEC.                          00080436
+           EXEC SQL INCLUDE AIRPORT  END-EXEC.                          00080542
+       COPY GOTKREQ.                                                    00080638
+       COPY GOTKRESP.                                                   00080738
+      * working storage data                                            00081010
+       01 CONTAINERNAME PIC X(16) VALUE IS 'GOTK-DATA'.                 00100036
+       01 RC PIC 9(8) BINARY.                                           00121010
+       LINKAGE SECTION.                                                 00130012
+       PROCEDURE DIVISION.                                              00150012
+       0000-MAIN-PROGRAM.                                               00160012
+            MOVE ZERO TO userId.                                        00170036
+            MOVE SPACE TO ticketNumber IN getOneTicketRequst.           00171040
+      * get inbound data                                                00180010
+            EXEC CICS GET CONTAINER(CONTAINERNAME)                      00190023
+               INTO (getOneTicketRequst)                                00200036
+               RESP(RC)                                                 00220010
+            END-EXEC.                                                   00230010
+       1000-PROCESS-DATA.                                               00310012
+      * query table                                                     00320010
+            MOVE ZERO TO H-USERID.                                      00320136
+            MOVE userId TO H-USERID.                                    00320239
+            MOVE SPACE TO H-TICKETNUMBER.                               00321036
+            MOVE ticketNumber IN getOneTicketRequst TO H-TICKETNUMBER.  00322041
+            EXEC SQL                                                    00330012
+                 SELECT PASSENGER.PASSENGERNAME,                        00340036
+                        PNR.FLIGHT,                                     00341036
+                        AIRLINE,                                        00342036
+                        TICKETNUMBER,                                   00343036
+                        CLASS,                                          00344036
+                        DATE,                                           00345036
+                        DEPARTURETIME,                                  00346036
+                        ARRIVALTIME,                                    00347036
+                        ORGAIRPORT,                                     00348036
+                        DSTAIRPORT,                                     00349036
+                        FARE,                                           00349136
+                        CURRENCY1,                                      00349236
+                        SEAT,                                           00349336
+                        GATE,                                           00349436
+                        OVERALLSTATUS,                                  00349536
+                        EXPIRE                                          00349636
+                 INTO   :H-PASSENGERNAME,                               00350036
+                        :H-FLIGHT,                                      00351036
+                        :H-AIRLINE,                                     00352036
+                        :H-TICKETNUMBER,                                00352136
+                        :H-CLASS,                                       00353036
+                        :H-DATE,                                        00354036
+                        :H-DEPARTURETIME,                               00355036
+                        :H-ARRIVALTIME,                                 00356036
+                        :H-ORGAIRPORT,                                  00357036
+                        :H-DSTAIRPORT,                                  00358036
+                        :H-FARE,                                        00359036
+                        :H-CURRENCY1,                                   00359136
+                        :H-SEAT,                                        00359236
+                        :H-GATE,                                        00359336
+                        :H-OVERALLSTATUS,                               00359436
+                        :H-EXPIRE                                       00359536
+                 FROM   AIRLINE,                                        00360036
+                        PNR,                                            00361036
+                        ROUTE,                                          00362036
+                        PASSENGER,                                      00363036
+                        AIRPORT_ROUTE                                   00364036
+                 WHERE  PASSENGER.PASSENGERID = PNR.USERID  AND         00370036
+                        PNR.FLIGHT = ROUTE.FLIGHT           AND         00371036
+                        PNR.FLIGHT = AIRPORT_ROUTE.FLIGHT   AND         00372036
+                        AIRLINE.AIRLINEID = ROUTE.AIRLINEID AND         00373036
+                        PNR.USERID = :H-USERID              AND         00374036
+                        TICKETNUMBER = :H-TICKETNUMBER                  00375036
+            END-EXEC                                                    00380036
+      * return result                                                   00390010
+            MOVE LOW-VALUE TO getOneTicketResponse.                     00391037
+      ****** leave a bug here                                           00391137
+            IF SQLCODE EQUAL TO ZERO                                    00392037
+               MOVE H-PASSENGERNAME TO passengerName                    00393137
+               MOVE H-FLIGHT TO flight                                  00393237
+               MOVE H-AIRLINE TO airline                                00393337
+               MOVE H-TICKETNUMBER TO ticketNumber                      00393441
+                                      IN getOneTicketResponse           00393541
+               MOVE H-CLASS TO flightClass                              00393641
+               MOVE H-DATE TO flightDate                                00393737
+               MOVE H-DEPARTURETIME TO departureTime                    00393837
+               MOVE H-ARRIVALTIME TO arrivalTime                        00393937
+               MOVE H-FARE TO fare                                      00394237
+               MOVE H-CURRENCY1 TO currency1                            00394337
+               MOVE H-SEAT TO seat                                      00394437
+               MOVE H-GATE TO gate                                      00394537
+               MOVE H-OVERALLSTATUS TO overallStatus                    00394637
+               MOVE H-EXPIRE TO expire                                  00394737
+      * convert airportid to airport name                               00394843
+               MOVE SPACE TO H-AIRPORT                                  00394943
+               EXEC SQL                                                 00395043
+                    SELECT AIRPORT                                      00395143
+                    INTO   :H-AIRPORT                                   00395243
+                    FROM   AIRPORT                                      00395343
+                    WHERE  AIRPORTID = :H-ORGAIRPORT                    00395443
+               END-EXEC                                                 00395543
+               MOVE H-AIRPORT TO orgAirport                             00395643
+               MOVE SPACE TO H-AIRPORT                                  00395743
+               EXEC SQL                                                 00395843
+                        SELECT AIRPORT                                  00395943
+                        INTO   :H-AIRPORT                               00396043
+                        FROM   AIRPORT                                  00396143
+                        WHERE  AIRPORTID = :H-DSTAIRPORT                00396243
+               END-EXEC                                                 00396343
+               MOVE H-AIRPORT TO dstAirport                             00396443
+            END-IF                                                      00397037
+            EXEC CICS PUT CONTAINER(CONTAINERNAME)                      00410023
+                FROM(getOneTicketResponse)                              00420037
+            END-EXEC.                                                   00440010
+      * return calling program                                          00450010
+007100      EXEC CICS RETURN END-EXEC.                                  00460012

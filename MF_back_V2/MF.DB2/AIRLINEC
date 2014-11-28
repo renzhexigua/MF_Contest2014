@@ -1,0 +1,17 @@
+--==============================================================--
+-- TABLE: AIRLINE                                               --
+--==============================================================--
+SET CURRENT SQLID='XR105';
+CREATE TABLE AIRLINE
+(
+   AIRLINEID      INT NOT NULL
+                        GENERATED ALWAYS AS IDENTITY
+                        (START WITH 1, INCREMENT BY 1),
+   IATA                 CHAR(2),
+   ICAO                 CHAR(3),
+   CARRIED              CHAR(3),
+   AIRLINE              CHAR(50),
+   CONSTRAINT AIRLEPK PRIMARY KEY(AIRLINEID)
+) IN MFV2.MFV2TS;
+CREATE UNIQUE INDEX AIRLEIDX ON AIRLINE(AIRLINEID);
+COMMIT;

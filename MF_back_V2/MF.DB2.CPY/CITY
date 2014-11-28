@@ -1,0 +1,25 @@
+      ******************************************************************
+      * DCLGEN TABLE(XR105.CITY)                                       *
+      *        LIBRARY(XR106.MF.DB2.CPY(CITY))                         *
+      *        ACTION(REPLACE)                                         *
+      *        LANGUAGE(COBOL)                                         *
+      *        NAMES(H-)                                               *
+      *        QUOTE                                                   *
+      *        COLSUFFIX(YES)                                          *
+      * ... IS THE DCLGEN COMMAND THAT MADE THE FOLLOWING STATEMENTS   *
+      ******************************************************************
+           EXEC SQL DECLARE XR105.CITY TABLE
+           ( CODE                           CHAR(3) NOT NULL,
+             CITY                           CHAR(20) NOT NULL
+           ) END-EXEC.
+      ******************************************************************
+      * COBOL DECLARATION FOR TABLE XR105.CITY                         *
+      ******************************************************************
+       01  DCLCITY.
+      *                       CODE
+           10 H-CODE               PIC X(3).
+      *                       CITY
+           10 H-CITY               PIC X(20).
+      ******************************************************************
+      * THE NUMBER OF COLUMNS DESCRIBED BY THIS DECLARATION IS 2       *
+      ******************************************************************

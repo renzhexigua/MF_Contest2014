@@ -1,0 +1,3 @@
+      *GAPWREQ
+       01 getPasswordRequest.
+          03 accountName PIC X(20).
