@@ -1,0 +1,4 @@
+      *VRFTRESP
+       01 verifyTicketResponse.
+          03 isValid PIC X(1).
+

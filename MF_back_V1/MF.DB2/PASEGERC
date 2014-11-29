@@ -1,0 +1,19 @@
+--==============================================================--
+-- TABLE: PASSENGER                                             --
+--==============================================================--
+SET CURRENT SQLID='XR105';
+CREATE TABLE PASSENGER
+(
+   PASSENGERID    INT NOT NULL
+                        GENERATED ALWAYS AS IDENTITY
+                        (START WITH 1, INCREMENT BY 1),
+   PASSENGERNAME        CHAR(40) NOT NULL,
+   SEX                  CHAR(6) NOT NULL,
+   PASSENGERTYPE        CHAR(2) NOT NULL,
+   CARDTYPE             CHAR(2) NOT NULL,
+   CARDID               CHAR(18) NOT NULL,
+   CONTACTINFO          CHAR(11),
+   CONSTRAINT PASEGEPK PRIMARY KEY(PASSENGERID)
+) IN MFV2.MFV2TS;
+--CREATE UNIQUE INDEX PASEGIDX ON PASSENGER(PASSENGERID);
+COMMIT;

@@ -1,0 +1,3 @@
+      *LTFPREQ
+       01 listTicketRequest.
+          03 accountId PIC S9(9) USAGE COMP.

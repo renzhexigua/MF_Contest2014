@@ -1,0 +1,49 @@
+000100  IDENTIFICATION DIVISION.                                        00010000
+000200  PROGRAM-ID. DISP.                                               00020000
+000300  DATA DIVISION.                                                  00030000
+000400  WORKING-STORAGE SECTION.                                        00040000
+      ** working storage data
+        COPY C1.
+000600  01 Q-NAME PIC X(20).                                            0006000
+        01 Q-NAME-LEN PIC S9(4) COMP-4 VALUE 20.
+        01 Q-PWD  PIC X(32).
+        01 Q-PWD-LEN PIC S9(4) COMP-4 VALUE 32.
+        01 PGM-ID PIC X(10) VALUE IS 'LTFPPROG'.
+      ** channel and containers
+        01 INPUTCONTAINER PIC X(16) VALUE IS 'MF-INPUT'.
+        01 OUTPUTCONTAINER PIC X(16) VALUE IS 'MF-OUTPUT'.
+        01 CHANNELNAME PIC X(16) VALUE IS 'MF-CHANNEL'.
+001000  LINKAGE SECTION.                                                00100000
+0011O0  PROCEDURE DIVISION.                                             00110000
+      *     EXEC CICS SEND CONTROL CURSOR(0) ERASE END-EXEC.
+      ** get query-name
+      *     MOVE SPACE TO Q-NAME.
+001300*     EXEC CICS RECEIVE INTO(Q-NAME)                              00130000
+001400*         LENGTH(Q-NAME-LEN)                                      00140000
+001700*     END-EXEC.                                                   00170000
+      *     MOVE 'RJX' TO Q-NAME.
+      ** init channel and container
+            MOVE 1  TO ACCOUNT.
+            EXEC CICS PUT CONTAINER(INPUTCONTAINER)
+                FROM(MF-INPUT)
+                CHANNEL(CHANNELNAME)
+            END-EXEC.
+      ** link qurey-business program
+            EXEC CICS LINK PROGRAM(PGM-ID)
+                CHANNEL(CHANNELNAME)
+            END-EXEC.
+      ** get result data
+            MOVE SPACE TO MF-OUTPUT.
+            EXEC CICS GET CONTAINER(OUTPUTCONTAINER)
+               INTO(MF-OUTPUT)
+               CHANNEL(CHANNELNAME)
+            END-EXEC.
+      ** location cursor
+            EXEC CICS SEND CONTROL CURSOR(400) END-EXEC.
+      ** display pwd
+            EXEC CICS SEND FROM(ACCT-PWD)
+                           LENGTH(Q-PWD-LEN)
+            END-EXEC.
+      ** return cics
+003400      EXEC CICS RETURN END-EXEC.                                  00340000
+003500      GOBACK.                                                     00350000

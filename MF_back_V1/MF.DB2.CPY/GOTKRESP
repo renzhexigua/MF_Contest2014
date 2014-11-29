@@ -1,0 +1,18 @@
+      *GOTKRESP
+       01 getOneTicketResponse.
+          03 passengerName   PIC X(40).
+          03 flight          PIC X(6).
+          03 airline         PIC X(50).
+          03 ticketNumber    PIC X(15).
+          03 flightClass     PIC X(1).
+          03 flightDate      PIC X(10).
+          03 departureTime   PIC X(8).
+          03 arrivalTime     PIC X(8).
+          03 orgAirport      PIC X(50).
+          03 dstAirport      PIC X(50).
+          03 fare            PIC S9(4)V9(1) USAGE COMP-3.
+          03 currency1       PIC X(3).
+          03 seat            PIC X(3).
+          03 gate            PIC X(2).
+          03 overallStatus   PIC X(1).
+          03 expire          PIC X(1).

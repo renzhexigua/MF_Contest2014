@@ -1,0 +1,34 @@
+SET CURRENT SQLID='XR105';
+  SELECT PASSENGER.PASSENGERID,
+         AIRLINE,
+         PNR.FLIGHT,
+         DATE,
+         DEPARTURETIME,
+         ORGAIRPORT,
+         ARRIVALTIME,
+         DSTAIRPORT,
+         EXPIRE,
+         TICKETSTATUS,
+         OVERALLSTATUS,
+         TICKETNUMBER
+  FROM   AIRLINE,
+           PNR,
+           ROUTE,
+           PASSENGER,
+           AIRPORT_ROUTE
+    WHERE  PASSENGER.PASSENGERID = PNR.USERID  AND
+           PNR.FLIGHT = ROUTE.FLIGHT           AND
+           PNR.FLIGHT = AIRPORT_ROUTE.FLIGHT   AND
+           AIRLINE.AIRLINEID = ROUTE.AIRLINEID AND
+           PNR.USERID IN (
+                  SELECT PASSENGER.PASSENGERID
+                  FROM   ACCOUNT_PASSENGER,
+                         PASSENGER,
+                         PNR
+                  WHERE  ACCOUNTID =    3           AND
+                         ACCOUNT_PASSENGER.PASSENGERID =
+                         PASSENGER.PASSENGERID   AND
+                ACCOUNT_PASSENGER.PASSENGERID =
+                   PNR.USERID
+                 )
+

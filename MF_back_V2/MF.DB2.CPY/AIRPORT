@@ -1,0 +1,28 @@
+      ******************************************************************
+      * DCLGEN TABLE(XR105.AIRPORT)                                    *
+      *        LIBRARY(XR106.MF.DB2.CPY(AIRPORT))                      *
+      *        ACTION(REPLACE)                                         *
+      *        LANGUAGE(COBOL)                                         *
+      *        NAMES(H-)                                               *
+      *        QUOTE                                                   *
+      *        COLSUFFIX(YES)                                          *
+      * ... IS THE DCLGEN COMMAND THAT MADE THE FOLLOWING STATEMENTS   *
+      ******************************************************************
+           EXEC SQL DECLARE XR105.AIRPORT TABLE
+           ( AIRPORTID                      INTEGER NOT NULL,
+             CITYCODE                       CHAR(3) NOT NULL,
+             AIRPORT                        CHAR(50) NOT NULL
+           ) END-EXEC.
+      ******************************************************************
+      * COBOL DECLARATION FOR TABLE XR105.AIRPORT                      *
+      ******************************************************************
+       01  DCLAIRPORT.
+      *                       AIRPORTID
+           10 H-AIRPORTID          PIC S9(9) USAGE COMP.
+      *                       CITYCODE
+           10 H-CITYCODE           PIC X(3).
+      *                       AIRPORT
+           10 H-AIRPORT            PIC X(50).
+      ******************************************************************
+      * THE NUMBER OF COLUMNS DESCRIBED BY THIS DECLARATION IS 3       *
+      ******************************************************************

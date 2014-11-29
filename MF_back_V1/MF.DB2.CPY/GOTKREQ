@@ -1,0 +1,4 @@
+      *GOTKREQ
+       01 getOneTicketRequst.
+          03 userId       PIC S9(9) USAGE COMP.
+          03 ticketNumber PIC X(15).

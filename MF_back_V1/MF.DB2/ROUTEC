@@ -1,0 +1,19 @@
+--==============================================================--
+-- TABLE: ROUTE                                                 --
+--==============================================================--
+SET CURRENT SQLID='XR105';
+CREATE TABLE ROUTE
+(
+   FLIGHT               CHAR(6) NOT NULL,
+   AIRLINEID            INT,
+   TERMINAL1            CHAR(2),
+   TERMINAL2            CHAR(2),
+   DEPARTURETIME        TIME NOT NULL,
+   ARRIVALTIME          TIME NOT NULL,
+   PLANETYPE            CHAR(3),
+   CONSTRAINT ROUTPK PRIMARY KEY(FLIGHT),
+   CONSTRAINT FK_ROTE FOREIGN KEY (AIRLINEID)
+      REFERENCES AIRLINE (AIRLINEID) ON DELETE CASCADE
+) IN MFV2.MFV2TS;
+--CREATE UNIQUE INDEX ROUTIDX ON ROUTE(FLIGHT);
+COMMIT;

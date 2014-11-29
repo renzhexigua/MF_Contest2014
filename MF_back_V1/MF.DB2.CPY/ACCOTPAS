@@ -1,0 +1,25 @@
+      ******************************************************************
+      * DCLGEN TABLE(XR105.ACCOUNT_PASSENGER)                          *
+      *        LIBRARY(XR106.MF.DB2.CPY(ACCOTPAS))                     *
+      *        ACTION(REPLACE)                                         *
+      *        LANGUAGE(COBOL)                                         *
+      *        NAMES(H-)                                               *
+      *        QUOTE                                                   *
+      *        COLSUFFIX(YES)                                          *
+      * ... IS THE DCLGEN COMMAND THAT MADE THE FOLLOWING STATEMENTS   *
+      ******************************************************************
+           EXEC SQL DECLARE XR105.ACCOUNT_PASSENGER TABLE
+           ( PASSENGERID                    INTEGER NOT NULL,
+             ACCOUNTID                      INTEGER NOT NULL
+           ) END-EXEC.
+      ******************************************************************
+      * COBOL DECLARATION FOR TABLE XR105.ACCOUNT_PASSENGER            *
+      ******************************************************************
+       01  DCLACCOUNT-PASSENGER.
+      *                       PASSENGERID
+           10 AP-PASSENGERID        PIC S9(9) USAGE COMP.
+      *                       ACCOUNTID
+           10 H-ACCOUNTID          PIC S9(9) USAGE COMP.
+      ******************************************************************
+      * THE NUMBER OF COLUMNS DESCRIBED BY THIS DECLARATION IS 2       *
+      ******************************************************************

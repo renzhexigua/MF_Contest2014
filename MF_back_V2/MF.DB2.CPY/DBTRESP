@@ -1,0 +1,3 @@
+       01  MF-OUTPUT.
+           10 ACCT-ID              PIC S9(9) USAGE COMP.
+           10 ACCT-PWD             PIC X(32).

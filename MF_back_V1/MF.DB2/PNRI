@@ -1,0 +1,46 @@
+SET CURRENT SQLID='XR105';
+
+--==============================================--
+--                TICKET 1                      --
+--==============================================--
+INSERT INTO PNR
+  (PNR,FLIGHT,USERID,CLASS,DATE,DATELIMIT,
+   TICKETSTATUS,TICKETNUMBER,FARE,CURRENCY1,PAYMETHOD,
+   PAYCURRENCY,SEATSTATUS,SEAT,GATE,OVERALLSTATUS,EXPIRE)
+ VALUES
+  ('15B96','CA660',7,'C','2014-10-20','2014-10-20 05:45:00',
+  'N','99933130480836',934.4,'RMB','CASH','RMB','OK','30B','3','0','N');
+
+--==============================================--
+--                TICKET 2                      --
+--==============================================--
+INSERT INTO PNR
+  (PNR,FLIGHT,USERID,CLASS,DATE,DATELIMIT,
+   TICKETSTATUS,TICKETNUMBER,FARE,CURRENCY1,PAYMETHOD,
+   PAYCURRENCY,SEATSTATUS,SEAT,GATE,OVERALLSTATUS,EXPIRE)
+ VALUES
+  ('3A8CD','CA67',8,'Y','2014-11-05','2014-11-05 19:50:00',
+  'N','99942100222310',1423.0,'RMB','CC','RMB','OK','11L',NULL,'0','N');
+
+--==============================================--
+--                TICKET 3                      --
+--==============================================--
+INSERT INTO PNR
+  (PNR,FLIGHT,USERID,CLASS,DATE,DATELIMIT,
+   TICKETSTATUS,TICKETNUMBER,FARE,CURRENCY1,PAYMETHOD,
+   PAYCURRENCY,SEATSTATUS,SEAT,GATE,OVERALLSTATUS,EXPIRE)
+ VALUES
+  ('BE1CE','CA718',9,'Y','2014-11-11','2014-11-11 06:42:00',
+ 'Y','99923421401931',534.0,'RMB','CHECK','USD','OK','4H',NULL,'0','N');
+
+--==============================================--
+--                TICKET 4                      --
+--------------------------------------------------------------
+INSERT INTO PNR
+  (PNR,FLIGHT,USERID,CLASS,DATE,DATELIMIT,
+   TICKETSTATUS,TICKETNUMBER,FARE,CURRENCY1,PAYMETHOD,
+   PAYCURRENCY,SEATSTATUS,SEAT,GATE,OVERALLSTATUS,EXPIRE)
+ VALUES
+ ('MT5O3','CA72',9,'Y','2014-11-12','2014-11-12 19:55:00',
+ 'N','99917854271132',780.0,'RMB','CASH','RMB','OK','24D',NULL,'0','N');
+COMMIT;
